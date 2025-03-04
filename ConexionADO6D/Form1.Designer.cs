@@ -44,11 +44,12 @@
             this.label5 = new System.Windows.Forms.Label();
             this.txbNombre = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.txbId = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.txbFiltro = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.dgvDatos = new System.Windows.Forms.DataGridView();
+            this.btnModificar = new System.Windows.Forms.Button();
+            this.mskId = new System.Windows.Forms.MaskedTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDatos)).BeginInit();
             this.SuspendLayout();
             // 
@@ -91,6 +92,7 @@
             // txbEstado
             // 
             this.txbEstado.Location = new System.Drawing.Point(96, 299);
+            this.txbEstado.MaxLength = 2;
             this.txbEstado.Name = "txbEstado";
             this.txbEstado.Size = new System.Drawing.Size(100, 20);
             this.txbEstado.TabIndex = 37;
@@ -184,13 +186,6 @@
             this.label3.TabIndex = 26;
             this.label3.Text = "Nombre";
             // 
-            // txbId
-            // 
-            this.txbId.Location = new System.Drawing.Point(96, 80);
-            this.txbId.Name = "txbId";
-            this.txbId.Size = new System.Drawing.Size(100, 20);
-            this.txbId.TabIndex = 25;
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -224,12 +219,33 @@
             this.dgvDatos.Name = "dgvDatos";
             this.dgvDatos.Size = new System.Drawing.Size(543, 330);
             this.dgvDatos.TabIndex = 21;
+            this.dgvDatos.SelectionChanged += new System.EventHandler(this.dgvDatos_SelectionChanged);
+            // 
+            // btnModificar
+            // 
+            this.btnModificar.Location = new System.Drawing.Point(169, 408);
+            this.btnModificar.Name = "btnModificar";
+            this.btnModificar.Size = new System.Drawing.Size(75, 23);
+            this.btnModificar.TabIndex = 42;
+            this.btnModificar.Text = "Modificar";
+            this.btnModificar.UseVisualStyleBackColor = true;
+            this.btnModificar.Click += new System.EventHandler(this.btnModificar_Click);
+            // 
+            // mskId
+            // 
+            this.mskId.Location = new System.Drawing.Point(96, 75);
+            this.mskId.Mask = "000-00-0000";
+            this.mskId.Name = "mskId";
+            this.mskId.Size = new System.Drawing.Size(100, 20);
+            this.mskId.TabIndex = 43;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.mskId);
+            this.Controls.Add(this.btnModificar);
             this.Controls.Add(this.btnAgregar);
             this.Controls.Add(this.chkContrato);
             this.Controls.Add(this.txbCP);
@@ -246,7 +262,6 @@
             this.Controls.Add(this.label5);
             this.Controls.Add(this.txbNombre);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.txbId);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.txbFiltro);
             this.Controls.Add(this.label1);
@@ -278,11 +293,12 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox txbNombre;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox txbId;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txbFiltro;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DataGridView dgvDatos;
+        private System.Windows.Forms.Button btnModificar;
+        private System.Windows.Forms.MaskedTextBox mskId;
     }
 }
 

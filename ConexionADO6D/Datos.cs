@@ -67,6 +67,7 @@ namespace ConexionADO6D
 
         public string AgregarAutor(string id, string Nombre, string Apellido, string Telefono, string Direccion, string Ciudad, string Estado, int CodigoPostal, bool contrato)
         {
+            int contrto = contrato == true ? 1 : 0;
             try
             {
                 string QueryAgregar = "INSERT INTO Authors VALUES " +
@@ -78,13 +79,47 @@ namespace ConexionADO6D
                     "'" + Ciudad + "'," +
                     "'" + Estado + "'," +
                     "'" + CodigoPostal + "'," +
-                    "'" + contrato + "'";
+                    "" + contrto + ")";
 
                 SqlConnection con = new SqlConnection(conexionBD);
 
                 con.Open();
 
                 SqlCommand cmd = new SqlCommand(QueryAgregar, con);
+
+                cmd.ExecuteNonQuery();
+
+                con.Close();
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return ex.ToString();
+            }
+        }
+
+        public string ModificarAutor(string id, string Nombre, string Apellido, string Telefono, string Direccion, string Ciudad, string Estado, int CodigoPostal, bool contrato)
+        {
+            int contrto = contrato == true ? 1 : 0;
+            try
+            {
+                string QueryModificar = "UPDATE Authors SET " +
+                    "au_lname = '" + Apellido + "'," +
+                    "au_fname = '" + Nombre + "'," +
+                    "phone = '" + Telefono + "'," +
+                    "address = '" + Direccion + "'," +
+                    "city = '" + Ciudad + "'," +
+                    "state = '" + Estado + "'," +
+                    "zip = '" + CodigoPostal + "'," +
+                    "contract = " + contrto + 
+                    "WHERE au_id = '"+ id + "'";
+
+                SqlConnection con = new SqlConnection(conexionBD);
+
+                con.Open();
+
+                SqlCommand cmd = new SqlCommand(QueryModificar, con);
 
                 cmd.ExecuteNonQuery();
 
