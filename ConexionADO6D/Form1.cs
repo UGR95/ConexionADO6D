@@ -134,5 +134,28 @@ namespace ConexionADO6D
                 throw;
             }
         }
+
+        private void btnEliminar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string Error = "";
+
+                Error = datos.EliminarAutor(mskId.Text);
+
+                if (string.IsNullOrEmpty(Error))
+                {
+                    MessageBox.Show("Registro Eliminado correctamente", "Confirmación", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else {
+                    MessageBox.Show( Error, "Confirmación", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Confirmación", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
     }
 }

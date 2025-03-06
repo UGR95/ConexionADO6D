@@ -50,6 +50,7 @@
             this.dgvDatos = new System.Windows.Forms.DataGridView();
             this.btnModificar = new System.Windows.Forms.Button();
             this.mskId = new System.Windows.Forms.MaskedTextBox();
+            this.btnEliminar = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDatos)).BeginInit();
             this.SuspendLayout();
             // 
@@ -239,11 +240,22 @@
             this.mskId.Size = new System.Drawing.Size(100, 20);
             this.mskId.TabIndex = 43;
             // 
+            // btnEliminar
+            // 
+            this.btnEliminar.Location = new System.Drawing.Point(290, 407);
+            this.btnEliminar.Name = "btnEliminar";
+            this.btnEliminar.Size = new System.Drawing.Size(75, 23);
+            this.btnEliminar.TabIndex = 44;
+            this.btnEliminar.Text = "Eliminar";
+            this.btnEliminar.UseVisualStyleBackColor = true;
+            this.btnEliminar.Click += new System.EventHandler(this.btnEliminar_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.btnEliminar);
             this.Controls.Add(this.mskId);
             this.Controls.Add(this.btnModificar);
             this.Controls.Add(this.btnAgregar);
@@ -299,6 +311,7 @@
         private System.Windows.Forms.DataGridView dgvDatos;
         private System.Windows.Forms.Button btnModificar;
         private System.Windows.Forms.MaskedTextBox mskId;
+        private System.Windows.Forms.Button btnEliminar;
     }
 }
 

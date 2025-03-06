@@ -132,5 +132,28 @@ namespace ConexionADO6D
                 return ex.ToString();
             }
         }
+
+        public string EliminarAutor(string Id)
+        {
+            try
+            {
+                string QueryEliminar = "DELETE FROM Authors " +
+                    "WHERE au_Id = '"+ Id +"'";
+
+                SqlConnection con = new SqlConnection(conexionBD);
+                con.Open();
+                SqlCommand cmd = new SqlCommand(QueryEliminar, con);
+
+                cmd.ExecuteNonQuery();
+
+                con.Close();
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return ex.ToString();
+            }
+        }
     }
 }
