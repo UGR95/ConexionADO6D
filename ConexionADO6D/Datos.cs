@@ -10,45 +10,60 @@ namespace ConexionADO6D
 {
     internal class Datos
     {
-        private string conexionBD = "Data Source = DESKTOP-7789AN9\\SQLEXPRESS; Initial Catalog = pubs6d; integrated security = true;";
+        private string Connexionstring = "Data Source = DESKTOP-7789AN9\\SQLEXPRESS; Initial Catalog = pubs6d; integrated security = true;";
 
-        public DataTable TablaAutor()
+        public DataTable Refrescar(string Estado)
         {
+            //string Query = "Select * from vwAutores with(nolock)";
+            DataTable dt = new DataTable();
 
+            SqlConnection con = new SqlConnection(Connexionstring);
+            con.Open();
+            SqlCommand cmd = new SqlCommand("sprConsultaAutor", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@Estado", Estado);
+
+            using (SqlDataReader reader = cmd.ExecuteReader())
+            {
+                dt.Load(reader);
+            }
+
+            con.Close();
+            return dt;
+
+        }
+
+        public DataTable CargarEstados()
+        {
+            DataTable dt = new DataTable();
             try
             {
-                string Query = "Select * from Authors with(nolock)";
-                DataTable dt = new DataTable();
-
-
-                SqlConnection con = new SqlConnection(conexionBD);
+                SqlConnection con = new SqlConnection(Connexionstring);
                 con.Open();
+                SqlCommand cmd = new SqlCommand("sprObtenerEstados", con);
+                cmd.CommandType = CommandType.StoredProcedure;
 
-                SqlCommand comand = new SqlCommand(Query, con);
-
-                SqlDataReader dr = comand.ExecuteReader();
-
-                dt.Load(dr);
-
-                con.Close();
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    dt.Load(reader);
+                }
 
                 return dt;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }
         }
 
-        public DataTable FiltroAutor(string Filtro)
+        public DataTable Filtro(string Filtro)
         {
             DataTable dt = new DataTable();
             try
             {
                 string QueryFiltro = "SELECT * FROM Authors WITH(NOLOCK) WHERE au_Fname like '%" + Filtro + "%'";
 
-                SqlConnection con = new SqlConnection(conexionBD);
-
+                SqlConnection con = new SqlConnection(Connexionstring);
                 con.Open();
 
                 SqlDataAdapter da = new SqlDataAdapter(QueryFiltro, con);
@@ -56,35 +71,33 @@ namespace ConexionADO6D
                 da.Fill(dt);
 
                 con.Close();
-
                 return dt;
             }
             catch (Exception)
             {
-                return dt;
+                return null;
             }
         }
 
-        public string AgregarAutor(string id, string Nombre, string Apellido, string Telefono, string Direccion, string Ciudad, string Estado, int CodigoPostal, bool contrato)
+        public string AgregarAutor(string id, string Nombre, string Apellido, string Telefono, string Direccion, string Ciudad, string Estado, int CodigoPostal, bool Contrato)
         {
-            int contrto = contrato == true ? 1 : 0;
             try
             {
-                string QueryAgregar = "INSERT INTO Authors VALUES " +
-                    "('" + id + "'," +
+                int cont = Contrato == true ? 1 : 0;
+                string QueryAgregar = "INSERT INTO Authors VALUES (" +
+                    "'" + id + "'," +
                     "'" + Apellido + "'," +
                     "'" + Nombre + "'," +
                     "'" + Telefono + "'," +
                     "'" + Direccion + "'," +
                     "'" + Ciudad + "'," +
                     "'" + Estado + "'," +
-                    "'" + CodigoPostal + "'," +
-                    "" + contrto + ")";
+                    "" + CodigoPostal + "," +
+                    "" + cont + ")";
 
-                SqlConnection con = new SqlConnection(conexionBD);
 
+                SqlConnection con = new SqlConnection(Connexionstring);
                 con.Open();
-
                 SqlCommand cmd = new SqlCommand(QueryAgregar, con);
 
                 cmd.ExecuteNonQuery();
@@ -99,27 +112,17 @@ namespace ConexionADO6D
             }
         }
 
-        public string ModificarAutor(string id, string Nombre, string Apellido, string Telefono, string Direccion, string Ciudad, string Estado, int CodigoPostal, bool contrato)
+        public string EliminarAutor(string id)
         {
-            int contrto = contrato == true ? 1 : 0;
             try
             {
-                string QueryModificar = "UPDATE Authors SET " +
-                    "au_lname = '" + Apellido + "'," +
-                    "au_fname = '" + Nombre + "'," +
-                    "phone = '" + Telefono + "'," +
-                    "address = '" + Direccion + "'," +
-                    "city = '" + Ciudad + "'," +
-                    "state = '" + Estado + "'," +
-                    "zip = '" + CodigoPostal + "'," +
-                    "contract = " + contrto + 
-                    "WHERE au_id = '"+ id + "'";
 
-                SqlConnection con = new SqlConnection(conexionBD);
+                string QueryAgregar = "DELETE FROM Authors WHERE au_id = '" + id + "'";
 
+
+                SqlConnection con = new SqlConnection(Connexionstring);
                 con.Open();
-
-                SqlCommand cmd = new SqlCommand(QueryModificar, con);
+                SqlCommand cmd = new SqlCommand(QueryAgregar, con);
 
                 cmd.ExecuteNonQuery();
 
@@ -132,17 +135,26 @@ namespace ConexionADO6D
                 return ex.ToString();
             }
         }
-
-        public string EliminarAutor(string Id)
+        public string ModificarAutor(string id, string Nombre, string Apellido, string Telefono, string Direccion, string Ciudad, string Estado, int CodigoPostal, bool Contrato)
         {
             try
             {
-                string QueryEliminar = "DELETE FROM Authors " +
-                    "WHERE au_Id = '"+ Id +"'";
+                int cont = Contrato == true ? 1 : 0;
+                string QueryAgregar = "UPDATE Authors" +
+                    " SET au_lname = '" + Apellido + "'," +
+                    "au_fname = '" + Nombre + "'," +
+                    "phone = '" + Telefono + "'," +
+                    "address ='" + Direccion + "'," +
+                    "city = '" + Ciudad + "'," +
+                    "state = '" + Estado + "'," +
+                    "zip = " + CodigoPostal + "," +
+                    "contract = " + cont +
+                    "WHERE au_id = '" + id + "'";
 
-                SqlConnection con = new SqlConnection(conexionBD);
+
+                SqlConnection con = new SqlConnection(Connexionstring);
                 con.Open();
-                SqlCommand cmd = new SqlCommand(QueryEliminar, con);
+                SqlCommand cmd = new SqlCommand(QueryAgregar, con);
 
                 cmd.ExecuteNonQuery();
 

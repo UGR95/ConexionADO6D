@@ -28,15 +28,38 @@ namespace ConexionADO6D
         {
             try
             {
-                DataTable dataTable = new DataTable();
+                dgvDatos.DataSource = datos.Refrescar(null);
+                CargarComboboxEstados();
 
-                dataTable = datos.TablaAutor();
-
-                dgvDatos.DataSource = dataTable;
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString(), "Informativo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void CargarComboboxEstados()
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                dt = datos.CargarEstados();
+
+                DataRow nuevaFila = dt.NewRow();
+                nuevaFila["Abreviacion"] = DBNull.Value;  // Sin valor
+                nuevaFila["Nombre"] = "Seleccionar Estado";
+                dt.Rows.InsertAt(nuevaFila, 0);
+
+                cbEstados.DataSource = dt;
+                cbEstados.DisplayMember = "Nombre";
+                cbEstados.ValueMember = "Abreviacion";
+
+                cbEstados.SelectedIndex = 0;
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
         }
 
@@ -44,16 +67,14 @@ namespace ConexionADO6D
         {
             try
             {
-                DataTable dataTable = new DataTable();
+                DataTable dt = new DataTable();
+                dt = datos.Filtro(txbFiltro.Text);
 
-                dataTable = datos.FiltroAutor(txbFiltro.Text);
-
-                dgvDatos.DataSource = dataTable;
+                dgvDatos.DataSource = dt;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                MessageBox.Show(this, ex.ToString());
             }
         }
 
@@ -61,77 +82,22 @@ namespace ConexionADO6D
         {
             try
             {
-                string error = "";
+                string Error = "";
 
-                error = datos.AgregarAutor(mskId.Text, txbNombre.Text, txbApellido.Text, txbTelefono.Text, txbDireccion.Text, txbCiudad.Text, txbEstado.Text, Convert.ToInt32(txbCP.Text), chkContrato.Checked);
+                Error = datos.AgregarAutor(mskId.Text, txbNombre.Text, txbApellido.Text, mskTelefono.Text, txbDireccion.Text, txbCiudad.Text, txbEstado.Text, Convert.ToInt32(txbCP.Text), chkContrato.Checked);
 
-                if (string.IsNullOrEmpty(error))
+                if (string.IsNullOrEmpty(Error))
                 {
                     MessageBox.Show("Registro agregado correctamente", "Informativo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    Refrescar();
                 }
                 else
-                    MessageBox.Show(error, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
+                {
+                    MessageBox.Show(Error, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void btnModificar_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                string error = "";
-
-                error = datos.ModificarAutor(mskId.Text, txbNombre.Text, txbApellido.Text, txbTelefono.Text, txbDireccion.Text, txbCiudad.Text, txbEstado.Text, Convert.ToInt32(txbCP.Text), chkContrato.Checked);
-
-                if (string.IsNullOrEmpty(error))
-                {
-                    MessageBox.Show("Registro Modificado correctamente", "Informativo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    Refrescar();
-                }
-                else
-                    MessageBox.Show(error, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void dgvDatos_SelectionChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                if (dgvDatos.SelectedRows.Count > 0)
-                {
-
-                    DataGridViewRow selec = dgvDatos.SelectedRows[0];
-
-                    if (selec != null)
-                    {
-                        mskId.Text = selec.Cells[0].Value.ToString();
-                        txbApellido.Text = selec.Cells[1].Value.ToString();
-                        txbNombre.Text = selec.Cells[2].Value.ToString();
-                        txbTelefono.Text = selec.Cells[3].Value.ToString();
-                        txbDireccion.Text = selec.Cells[4].Value.ToString();
-                        txbCiudad.Text = selec.Cells[5].Value.ToString();
-                        txbEstado.Text = selec.Cells[6].Value.ToString();
-                        txbCP.Text = selec.Cells[7].Value.ToString();
-                        chkContrato.Checked = Convert.ToBoolean(selec.Cells[8].Value);
-
-                        mskId.Enabled = false;
-                    }
-                }
-            }
-            catch (Exception)
-            {
-
-                throw;
             }
         }
 
@@ -145,16 +111,77 @@ namespace ConexionADO6D
 
                 if (string.IsNullOrEmpty(Error))
                 {
-                    MessageBox.Show("Registro Eliminado correctamente", "Confirmación", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Registro Borrado correctamente", "Informativo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-                else {
-                    MessageBox.Show( Error, "Confirmación", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                else
+                {
+                    MessageBox.Show(Error, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString(), "Confirmación", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void dgvDatos_SelectionChanged(object sender, EventArgs e)
+        {
+            if (dgvDatos.SelectedRows.Count > 0)
+            {
+
+                DataGridViewRow selec = dgvDatos.SelectedRows[0];
+
+                if (selec != null)
+                {
+                    mskId.Text = selec.Cells[0].Value.ToString();
+                    txbApellido.Text = selec.Cells[1].Value.ToString();
+                    txbNombre.Text = selec.Cells[2].Value.ToString();
+                    mskTelefono.Text = selec.Cells[3].Value.ToString();
+                    txbDireccion.Text = selec.Cells[4].Value.ToString();
+                    txbCiudad.Text = selec.Cells[5].Value.ToString();
+                    txbEstado.Text = selec.Cells[6].Value.ToString();
+                    txbCP.Text = selec.Cells[7].Value.ToString();
+                    chkContrato.Checked = Convert.ToBoolean(selec.Cells[8].Value);
+                }
+            }
+        }
+
+        private void btnModificar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string Error;
+
+                Error = datos.ModificarAutor(mskId.Text, txbNombre.Text, txbApellido.Text, mskTelefono.Text, txbDireccion.Text, txbCiudad.Text, txbEstado.Text, Convert.ToInt32(txbCP.Text), chkContrato.Checked);
+                if (string.IsNullOrEmpty(Error))
+                {
+                    MessageBox.Show("Registro Actualizado correctamente", "Informativo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    Refrescar();
+                }
+                else
+                {
+                    MessageBox.Show(Error, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        private void cbEstados_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                string estado = cbEstados.SelectedIndex != 0 ? cbEstados.SelectedValue?.ToString() : null;
+                dgvDatos.DataSource = datos.Refrescar(estado);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }
