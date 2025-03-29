@@ -19,7 +19,7 @@ namespace ConexionADO6D
 
             SqlConnection con = new SqlConnection(Connexionstring);
             con.Open();
-            SqlCommand cmd = new SqlCommand("sprConsultaAutor", con);
+            SqlCommand cmd = new SqlCommand("sprConsultarAutores", con);
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@Estado", Estado);
 
@@ -84,7 +84,7 @@ namespace ConexionADO6D
             try
             {
                 int cont = Contrato == true ? 1 : 0;
-                string QueryAgregar = "INSERT INTO Authors VALUES (" +
+                /*string QueryAgregar = "INSERT INTO Authors VALUES (" +
                     "'" + id + "'," +
                     "'" + Apellido + "'," +
                     "'" + Nombre + "'," +
@@ -94,11 +94,23 @@ namespace ConexionADO6D
                     "'" + Estado + "'," +
                     "" + CodigoPostal + "," +
                     "" + cont + ")";
+                */
 
 
                 SqlConnection con = new SqlConnection(Connexionstring);
                 con.Open();
-                SqlCommand cmd = new SqlCommand(QueryAgregar, con);
+                SqlCommand cmd = new SqlCommand("spi_AgregarAutor", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@Id", id);
+                cmd.Parameters.AddWithValue("@Nombre", Nombre);
+                cmd.Parameters.AddWithValue("@Apellido",Apellido);
+                cmd.Parameters.AddWithValue("@Telefono",Telefono);
+                cmd.Parameters.AddWithValue("@Direccion",Direccion);
+                cmd.Parameters.AddWithValue("@Ciudad",Ciudad);
+                cmd.Parameters.AddWithValue("@Estado",Estado);
+                cmd.Parameters.AddWithValue("@CodigoPostal",CodigoPostal);
+                cmd.Parameters.AddWithValue("@Contrato",cont);
 
                 cmd.ExecuteNonQuery();
 
