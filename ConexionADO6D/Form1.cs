@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -117,12 +118,28 @@ namespace ConexionADO6D
             try
             {
                 string Error = "";
+                string id = "";
+                if (dgvDatos.SelectedRows.Count == 1)
+                {
+                    DataGridViewRow selec = dgvDatos.SelectedRows[0];
 
-                Error = datos.EliminarAutor(mskId.Text);
+                    //Validamos que la información no sea nulla o vacia
+                    if (selec != null && selec.Cells[0].Value != null && !string.IsNullOrEmpty(selec.Cells[0].Value.ToString()))
+                    {
+                        System.Windows.MessageBoxResult result = (System.Windows.MessageBoxResult)MessageBox.Show("¿Estás seguro de elimiar el registro?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                        if (result == System.Windows.MessageBoxResult.Yes)
+                        {
+                            id = selec.Cells[0].Value.ToString();
+                            Error = datos.EliminarAutor(id);
+                        }
+                    }
+                }
 
                 if (string.IsNullOrEmpty(Error))
                 {
                     MessageBox.Show("Registro Borrado correctamente", "Informativo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    Refrescar();
                 }
                 else
                 {
@@ -176,7 +193,7 @@ namespace ConexionADO6D
             try
             {
                 //Validamos que solo se pueda seleccionar 1 registro
-                if (dgvDatos.SelectedRows.Count == 1)
+                if (dgvDatos.SelectedRows.Count == 1 )
                 {
 
                     DataGridViewRow selec = dgvDatos.SelectedRows[0];
@@ -204,7 +221,7 @@ namespace ConexionADO6D
                         this.Hide();
                     }
                     else
-                        MessageBox.Show("Favor de seleccionar un registro á", "Información", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBox.Show("Favor de seleccionar un registro válido", "Información", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
                 else
                     MessageBox.Show("Favor de seleccionar solo 1 registro", "Información", MessageBoxButtons.OK, MessageBoxIcon.Warning);

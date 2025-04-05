@@ -41,16 +41,43 @@ namespace ConexionADO6D
 
         private void frmActualizaAutor_Load(object sender, EventArgs e)
         {
+            CargarEstados();
+
             mskId.Text = _id;
+            mskId.Enabled = false;
             txbNombre.Text = _Nombre;
             txbApellido.Text = _Apellido;
             mskTelefono.Text = _Telefono;
             txbDireccion.Text = _Direccion;
             txbCiudad.Text = _Ciudad;
-            txbEstado.Text = _Estado;
+            cbEstado.Text = _Estado;
             txbCP.Text = _CodigoPostal;
             chkContrato.Checked = _Contrato;
 
+        }
+
+        private void CargarEstados()
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                //Lenamos un dataTable con la información que regresa el metodo CargarEstados
+                dt = datos.CargarEstados();
+
+                //Cargamos el combobox con los estados
+                cbEstado.DataSource = dt;
+                //Indicamos que se va a mostrar el valor Nombre
+                cbEstado.DisplayMember = "Nombre";
+                //Indicamos que se va a enviar el valor Abreviación cuando realicemos alguna acción
+                cbEstado.ValueMember = "Abreviacion";
+
+                cbEstado.SelectedIndex = 0;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         private void btnGuardar_Click(object sender, EventArgs e)
@@ -59,7 +86,7 @@ namespace ConexionADO6D
             {
                 string Error;
 
-                Error = datos.ModificarAutor(mskId.Text, txbNombre.Text, txbApellido.Text, mskTelefono.Text, txbDireccion.Text, txbCiudad.Text, txbEstado.Text, Convert.ToInt32(txbCP.Text), chkContrato.Checked);
+                Error = datos.ModificarAutor(mskId.Text, txbNombre.Text, txbApellido.Text, mskTelefono.Text, txbDireccion.Text, txbCiudad.Text, cbEstado.SelectedValue.ToString(), Convert.ToInt32(txbCP.Text), chkContrato.Checked);
                 if (string.IsNullOrEmpty(Error))
                 {
                     MessageBox.Show("Registro Actualizado correctamente", "Informativo", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -79,6 +106,12 @@ namespace ConexionADO6D
             {
                 MessageBox.Show(ex.ToString(), "Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void frmActualizaAutor_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Form1 frm = new Form1();
+            frm.Show();
         }
     }
 }

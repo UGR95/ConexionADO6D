@@ -33,7 +33,6 @@
             this.chkContrato = new System.Windows.Forms.CheckBox();
             this.txbCP = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.txbEstado = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.txbCiudad = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
@@ -46,6 +45,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.btnGuardar = new System.Windows.Forms.Button();
+            this.cbEstado = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // mskTelefono
@@ -89,14 +89,6 @@
             this.label6.Size = new System.Drawing.Size(72, 13);
             this.label6.TabIndex = 60;
             this.label6.Text = "Código Postal";
-            // 
-            // txbEstado
-            // 
-            this.txbEstado.Location = new System.Drawing.Point(102, 234);
-            this.txbEstado.MaxLength = 2;
-            this.txbEstado.Name = "txbEstado";
-            this.txbEstado.Size = new System.Drawing.Size(100, 20);
-            this.txbEstado.TabIndex = 59;
             // 
             // label7
             // 
@@ -199,18 +191,26 @@
             this.btnGuardar.UseVisualStyleBackColor = true;
             this.btnGuardar.Click += new System.EventHandler(this.btnGuardar_Click);
             // 
+            // cbEstado
+            // 
+            this.cbEstado.FormattingEnabled = true;
+            this.cbEstado.Location = new System.Drawing.Point(102, 234);
+            this.cbEstado.Name = "cbEstado";
+            this.cbEstado.Size = new System.Drawing.Size(100, 21);
+            this.cbEstado.TabIndex = 66;
+            // 
             // frmActualizaAutor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(226, 386);
+            this.Controls.Add(this.cbEstado);
             this.Controls.Add(this.btnGuardar);
             this.Controls.Add(this.mskTelefono);
             this.Controls.Add(this.mskId);
             this.Controls.Add(this.chkContrato);
             this.Controls.Add(this.txbCP);
             this.Controls.Add(this.label6);
-            this.Controls.Add(this.txbEstado);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.txbCiudad);
             this.Controls.Add(this.label8);
@@ -224,6 +224,7 @@
             this.Controls.Add(this.label2);
             this.Name = "frmActualizaAutor";
             this.Text = "frmActualizaAutor";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmActualizaAutor_FormClosed);
             this.Load += new System.EventHandler(this.frmActualizaAutor_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -237,7 +238,6 @@
         private System.Windows.Forms.CheckBox chkContrato;
         private System.Windows.Forms.TextBox txbCP;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox txbEstado;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox txbCiudad;
         private System.Windows.Forms.Label label8;
@@ -250,5 +250,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btnGuardar;
+        private System.Windows.Forms.ComboBox cbEstado;
     }
 }
